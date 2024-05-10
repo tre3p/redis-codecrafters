@@ -1,11 +1,11 @@
 package com.tre3p.server
 
+import com.tre3p.resp.RESPDecoder
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.Exception
 import java.net.ServerSocket
-import java.net.Socket
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -30,11 +30,14 @@ class RedisTcpServer(
                 try {
                     logger.info("Received new request, processing..")
                     val inputStream = clientSocket.getInputStream()
+                    println(RESPDecoder().decode(inputStream))
                     val outputStream = clientSocket.getOutputStream()
                     val bufferedReader = BufferedReader(InputStreamReader(inputStream))
 
                     var readLine = bufferedReader.readLine()
                     while (readLine != null) {
+                        println(readLine)
+                        println(RESPDecoder().decode(inputStream))
                         if (readLine.lowercase() == "ping") {
                             outputStream.write("+PONG\r\n".toByteArray())
                         }

@@ -10,7 +10,7 @@ private const val ASTERISK_BYTE = '*'.code.toByte()
 
 class RESPDecoder {
 
-    fun parse(inputStream: InputStream): Any {
+    fun decode(inputStream: InputStream): Any {
         val firstByte = inputStream.readByte()
         return when(firstByte) {
             ASTERISK_BYTE -> parseArray(inputStream)
@@ -34,7 +34,7 @@ class RESPDecoder {
         val elements = mutableListOf<Any>()
 
         for (i in 0 until elementsCount) {
-            elements.add(parse(inputStream))
+            elements.add(decode(inputStream))
         }
 
         return elements
