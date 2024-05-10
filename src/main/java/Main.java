@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,6 +12,7 @@ public class Main {
             serverSocket = new ServerSocket(port);
             serverSocket.setReuseAddress(true);
             clientSocket = serverSocket.accept();
+            clientSocket.getOutputStream().write("+PONG\r\n".getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
