@@ -12,10 +12,10 @@ class GetHandler(
 
     private val NULL_BULK_STRING = BulkString(-1, "")
 
-    // Currently treats all values as strings
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 2) return SimpleString("Unexpected args size for GET command")
-        val value = keyValueStorage.getValue(args[1]!!)
+        val key = args[1]!!
+        val value = keyValueStorage.getValue(key)
 
         if (value == null) {
             return NULL_BULK_STRING
@@ -24,6 +24,7 @@ class GetHandler(
         if (value is ExpiryValueWrapper<*>) {
             val currentTime = System.currentTimeMillis()
             return if (value.expiryTime.toInt() != -1 && value.expiryTime < currentTime) {
+                keyValueStorage.removeKey(key)
                 NULL_BULK_STRING
             } else {
                 BulkString(value.value.toString().length.toLong(), value.value.toString())
