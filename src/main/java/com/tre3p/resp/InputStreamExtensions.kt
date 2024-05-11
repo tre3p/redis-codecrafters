@@ -4,8 +4,6 @@ import java.io.InputStream
 import java.lang.Exception
 import java.lang.StringBuilder
 
-fun InputStream.readByte() = this.readNBytes(1)[0]
-
 fun InputStream.readCrLfTerminatedInt(): Int {
     val sb = StringBuilder()
 
