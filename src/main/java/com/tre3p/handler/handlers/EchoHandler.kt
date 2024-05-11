@@ -1,4 +1,4 @@
-package com.tre3p.handler
+package com.tre3p.handler.handlers
 
 import com.tre3p.resp.types.BulkString
 import java.lang.Exception

@@ -3,12 +3,9 @@ package com.tre3p.handler
 import com.tre3p.resp.types.SimpleString
 import org.apache.logging.log4j.kotlin.Logging
 
-private val handlers = mapOf(
-    "echo" to EchoHandler(),
-    "ping" to PingHandler()
-)
-
-class HandlerRouter : Logging {
+class HandlerRouter(
+    private val handlerProvider: HandlerProvider
+) : Logging {
     fun route(args: List<*>): Any {
         if (args.isEmpty()) {
             logger.debug("No arguments provided, nothing to do..")
@@ -16,7 +13,7 @@ class HandlerRouter : Logging {
         }
 
         val commandType = args[0].toString().lowercase()
-        val commandHandler = handlers[commandType]
+        val commandHandler = handlerProvider.getHandler(commandType)
         if (commandHandler == null) {
             logger.debug("No handler found for command $commandType")
             return SimpleString("No handler found for command $commandType")
