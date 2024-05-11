@@ -8,6 +8,7 @@ import com.tre3p.storage.KeyValueStorage
 class GetHandler(
     val keyValueStorage: KeyValueStorage
 ): Handler {
+    // Currently treats all values as strings
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 2) return SimpleString("Unexpected args size for GET command")
         val value = keyValueStorage.getValue(args[1]!!)?.toString()
