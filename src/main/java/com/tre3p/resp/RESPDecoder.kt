@@ -3,12 +3,8 @@ package com.tre3p.resp
 import java.io.InputStream
 import java.lang.Exception
 
-private const val PLUS_BYTE = '+'.code.toByte()
-private const val DOLLAR_BYTE = '$'.code.toByte()
-private const val COLON_BYTE = ':'.code.toByte()
-private const val ASTERISK_BYTE = '*'.code.toByte()
-
-class RESPDecoder {
+open class RESPDecoder {
+    companion object: RESPDecoder() {}
 
     fun decode(inputStream: InputStream): Any {
         val firstByte = inputStream.readByte()
