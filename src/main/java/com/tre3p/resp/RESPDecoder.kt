@@ -4,14 +4,14 @@ import java.io.InputStream
 import java.lang.Exception
 
 open class RESPDecoder {
-    companion object: RESPDecoder() {}
+    fun decode(inputStream: InputStream): Any? {
+        val readByte = inputStream.read().toByte()
 
-    fun decode(inputStream: InputStream): Any {
-        val firstByte = inputStream.readByte()
-        return when(firstByte) {
+        return when (readByte) {
+            EOF_BYTE -> null
             ASTERISK_BYTE -> parseArray(inputStream)
             DOLLAR_BYTE -> parseString(inputStream)
-            else -> throw Exception("$firstByte byte type isn't supported yet")
+            else -> throw Exception("$readByte byte type isn't supported yet")
         }
     }
 
@@ -30,7 +30,7 @@ open class RESPDecoder {
         val elements = mutableListOf<Any>()
 
         for (i in 0 until elementsCount) {
-            elements.add(decode(inputStream))
+            elements.add(decode(inputStream)!!)
         }
 
         return elements
