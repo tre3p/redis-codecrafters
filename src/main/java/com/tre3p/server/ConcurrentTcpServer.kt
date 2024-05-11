@@ -8,7 +8,7 @@ import java.net.ServerSocket
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
-class RedisTcpServer(
+class ConcurrentTcpServer(
     private val port: Int,
     private val handlerFunc: (InputStream, OutputStream) -> (Unit)
 ) : Logging {
@@ -19,13 +19,15 @@ class RedisTcpServer(
     fun launchServer() {
         serverSocket = ServerSocket(port).also { it.reuseAddress = true }
         thread { launchRequestListener() }
+        logger.info("TCP server started")
     }
 
     private fun launchRequestListener() {
-        serverSocket ?: throw Exception("Redis TCP server isn't launched!")
+        serverSocket ?: throw Exception("TCP server isn't launched!")
 
-        while (!Thread.currentThread().isInterrupted) {
+        while (!Thread.currentThread().isInterrupted && !serverSocket!!.isClosed) {
             val clientSocket = serverSocket!!.accept()
+
             defaultThreadPool.execute {
                 try {
                     logger.info("Received new request, processing..")
