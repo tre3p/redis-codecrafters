@@ -9,7 +9,7 @@ import com.tre3p.handler.handlers.SetHandler
 import com.tre3p.resp.RESPDecoder
 import com.tre3p.resp.RESPEncoder
 import com.tre3p.server.ConcurrentTcpServer
-import com.tre3p.storage.InMemoryKeyValueStorage
+import com.tre3p.storage.SimpleInMemoryKeyValueStorage
 
 private const val TCP_PORT = 6379
 
@@ -28,7 +28,7 @@ private fun buildHandlerProvider(): HandlerProvider {
     val echoHandler = EchoHandler()
     val pingHandler = PingHandler()
 
-    val kvStorage = InMemoryKeyValueStorage()
+    val kvStorage = SimpleInMemoryKeyValueStorage()
     val getHandler = GetHandler(kvStorage)
     val setHandler = SetHandler(kvStorage)
 

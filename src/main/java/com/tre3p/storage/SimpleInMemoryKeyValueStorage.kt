@@ -2,7 +2,7 @@ package com.tre3p.storage
 
 import java.util.concurrent.ConcurrentHashMap
 
-class InMemoryKeyValueStorage : KeyValueStorage {
+class SimpleInMemoryKeyValueStorage : KeyValueStorage {
     private val storage = ConcurrentHashMap<Any, Any>()
 
     override fun getValue(key: Any): Any? {
@@ -11,5 +11,9 @@ class InMemoryKeyValueStorage : KeyValueStorage {
 
     override fun putValue(key: Any, value: Any) {
         storage[key] = value
+    }
+
+    override fun removeKey(key: Any) {
+        storage.remove(key)
     }
 }
