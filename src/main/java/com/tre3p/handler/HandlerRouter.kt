@@ -3,7 +3,8 @@ package com.tre3p.handler
 import org.apache.logging.log4j.kotlin.Logging
 
 private val handlers = mapOf(
-    "echo" to EchoHandler()
+    "echo" to EchoHandler(),
+    "ping" to PingHandler()
 )
 
 class HandlerRouter : Logging {
