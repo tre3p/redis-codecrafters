@@ -23,7 +23,7 @@ class GetHandler(
 
         if (value is ExpiryValueWrapper<*>) {
             val currentTime = System.currentTimeMillis()
-            return if ((value.addedMs.toInt() != -1 && value.expiresInMs.toInt() != -1) && value.addedMs + value.expiresInMs < currentTime) {
+            return if (value.expiryTime.toInt() != -1 && value.expiryTime < currentTime) {
                 NULL_BULK_STRING
             } else {
                 BulkString(value.value.toString().length.toLong(), value.value.toString())

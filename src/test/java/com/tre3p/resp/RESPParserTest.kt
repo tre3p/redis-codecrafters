@@ -15,6 +15,5 @@ class RESPParserTest {
         assertEquals(2, parseResult.size)
         assertEquals("ECHO", parseResult[0])
         assertEquals("hey", parseResult[1])
-
     }
 }

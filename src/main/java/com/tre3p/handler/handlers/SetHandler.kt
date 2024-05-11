@@ -20,8 +20,7 @@ class SetHandler(
             if (arg.lowercase() == "px") {
                 val currentTime = System.currentTimeMillis()
                 val expiresIn = args[4]!!.toString().toLong()
-                expiryValueWrapper.expiresInMs = expiresIn
-                expiryValueWrapper.addedMs = currentTime
+                expiryValueWrapper.expiryTime = currentTime + expiresIn
             }
         }
 
