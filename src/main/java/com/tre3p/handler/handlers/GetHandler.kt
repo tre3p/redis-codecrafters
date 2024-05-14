@@ -17,6 +17,7 @@ class GetHandler(
         val key = args[1]!!
         val value = keyValueStorage.getValue(key)
 
+
         if (value == null) {
             return NULL_BULK_STRING
         }
