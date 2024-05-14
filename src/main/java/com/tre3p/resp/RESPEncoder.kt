@@ -6,7 +6,7 @@ import java.lang.Exception
 
 class RESPEncoder {
     fun encode(args: Any): ByteArray {
-        return when(args) {
+        return when (args) {
             is BulkString -> encodeBulkString(args)
             is SimpleString -> encodeSimpleString(args)
             else -> throw Exception("Unknown RESP data type provided")
@@ -14,11 +14,17 @@ class RESPEncoder {
     }
 
     private fun encodeBulkString(bulkString: BulkString): ByteArray {
-        return byteArrayOf(DOLLAR_BYTE)
+        val encodedLength = byteArrayOf(DOLLAR_BYTE)
             .plus(bulkString.length.toString().encodeToByteArray())
             .plus(CR).plus(LF)
-            .plus(bulkString.data.encodeToByteArray())
-            .plus(CR).plus(LF)
+
+        return if (bulkString.data.isBlank()) {
+            encodedLength
+        } else {
+            encodedLength
+                .plus(bulkString.data.encodeToByteArray())
+                .plus(CR).plus(LF)
+        }
     }
 
     private fun encodeSimpleString(simpleString: SimpleString): ByteArray {
