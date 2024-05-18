@@ -10,28 +10,29 @@ class GetHandler(
     val keyValueStorage: KeyValueStorage
 ): Handler {
 
-    private val NULL_BULK_STRING = BulkString(-1, "")
+    private val NULL_BULK_STRING = BulkString(null)
 
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 2) return SimpleString("Unexpected args size for GET command")
         val key = args[1]!!
-        val value = keyValueStorage.getValue(key)
+        val storageValue = keyValueStorage.getValue(key)
 
 
-        if (value == null) {
+        if (storageValue == null) {
             return NULL_BULK_STRING
         }
 
-        if (value is ExpiryValueWrapper<*>) {
+        if (storageValue is ExpiryValueWrapper<*>) {
             val currentTime = System.currentTimeMillis()
-            return if (value.expiryTime.toInt() != -1 && value.expiryTime < currentTime) {
+
+            return if (storageValue.expiryTime.toInt() != -1 && storageValue.expiryTime < currentTime) {
                 keyValueStorage.removeKey(key)
                 NULL_BULK_STRING
             } else {
-                BulkString(value.value.toString().length.toLong(), value.value.toString())
+                BulkString(storageValue.value.toString())
             }
         }
 
-        return BulkString(value.toString().length.toLong(), value.toString())
+        return BulkString(storageValue.toString())
     }
 }

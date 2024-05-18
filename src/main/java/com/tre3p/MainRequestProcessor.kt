@@ -16,7 +16,6 @@ class MainRequestProcessor(
         while (true) {
             val decodedStatement = respDecoder.decode(requestInputStream)
             if (decodedStatement == null) {
-                logger.info("All instructions are read from input stream")
                 break
             }
             logger.info("Got instruction: $decodedStatement")
