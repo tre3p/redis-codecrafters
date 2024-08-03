@@ -2,7 +2,7 @@ package com.tre3p.storage
 
 import java.util.concurrent.ConcurrentHashMap
 
-class SimpleInMemoryKeyValueStorage : KeyValueStorage {
+class InMemoryKeyValueStorage : KeyValueStorage {
     private val storage = ConcurrentHashMap<Any, Any>()
 
     override fun getValue(key: Any): Any? {

@@ -12,19 +12,20 @@ class MainRequestProcessor(
     private val respEncoder: RESPEncoder,
     private val router: HandlerRouter
 ): Logging {
-    fun processRequest(requestInputStream: InputStream, requestOutputStream: OutputStream) {
-        while (true) {
-            val decodedStatement = respDecoder.decode(requestInputStream)
-            if (decodedStatement == null) {
-                break
-            }
-            logger.info("Got instruction: $decodedStatement")
 
-            router.route(decodedStatement as List<*>).let {
-                logger.info("Encoding and sending response: $it")
-                val encodedResponse = respEncoder.encode(it)
-                requestOutputStream.write(encodedResponse)
-            }
+    /**
+     * processRequest() should be executed in a loop since one connection can send multiple commands to server
+     */
+    tailrec fun processRequest(requestInputStream: InputStream, requestOutputStream: OutputStream) {
+        val decodedStatement = respDecoder.decode(requestInputStream) ?: return
+        logger.info("Got instruction: $decodedStatement")
+
+        router.route(decodedStatement as List<*>).let {
+            logger.info("Encoding and sending response: $it")
+            val encodedResponse = respEncoder.encode(it)
+            requestOutputStream.write(encodedResponse)
         }
+
+        processRequest(requestInputStream, requestOutputStream)
     }
 }

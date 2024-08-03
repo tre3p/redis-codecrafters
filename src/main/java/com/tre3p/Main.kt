@@ -7,41 +7,43 @@ import com.tre3p.handler.handlers.*
 import com.tre3p.resp.RESPDecoder
 import com.tre3p.resp.RESPEncoder
 import com.tre3p.server.ConcurrentTcpServer
-import com.tre3p.storage.SimpleInMemoryKeyValueStorage
+import com.tre3p.storage.InMemoryKeyValueStorage
 
 private const val TCP_PORT = 6379
 
-private lateinit var CLI_ARGS: Map<String, List<String>>
-
 fun main(args: Array<String>) {
-    CLI_ARGS = parseCliArguments(args)
+    prepareAndLaunchServer(args)
+}
+
+fun prepareAndLaunchServer(args: Array<String>) {
+    val cliArgs = parseCliArguments(args)
 
     val mainRequestProcessor = MainRequestProcessor(
         RESPDecoder(),
         RESPEncoder(),
-        HandlerRouter(buildHandlerProvider())
+        HandlerRouter(buildHandlerProvider(cliArgs))
     )
 
     val redisServer = ConcurrentTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
     redisServer.launchServer()
 }
 
-private fun buildPersistenceConfig(): PersistenceConfig {
+private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig {
     return PersistenceConfig(
-        dirName = CLI_ARGS["--dir"]?.first(),
-        dbFileName = CLI_ARGS["--dbfilename"]?.first()
+        dirName = args["--dir"]?.first(),
+        dbFileName = args["--dbfilename"]?.first()
     )
 }
 
-private fun buildHandlerProvider(): HandlerProvider {
+private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvider {
     val echoHandler = EchoHandler()
     val pingHandler = PingHandler()
 
-    val kvStorage = SimpleInMemoryKeyValueStorage()
+    val kvStorage = InMemoryKeyValueStorage()
     val getHandler = GetHandler(kvStorage)
     val setHandler = SetHandler(kvStorage)
 
-    val persistenceConfig = buildPersistenceConfig()
+    val persistenceConfig = buildPersistenceConfig(args)
     val configHandler = ConfigHandler(persistenceConfig)
 
     return HandlerProvider(mapOf(
