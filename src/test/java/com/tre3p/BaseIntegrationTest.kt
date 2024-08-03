@@ -4,6 +4,7 @@ import com.tre3p.resp.RESPDecoder
 import com.tre3p.resp.RESPEncoder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -31,17 +32,17 @@ open class BaseIntegrationTest(val args: Map<String, List<String>> = mapOf()) {
         return clientSocket
     }
 
-    protected fun sendServerMessage(clientSocket: Socket, msg: ByteArray) {
-        clientSocket.getOutputStream().write(msg)
+    protected fun Socket.sendServerMessage(msg: ByteArray) {
+        this.getOutputStream().write(msg)
     }
 
-    protected fun awaitServerMessage(clientSocket: Socket, timeoutMs: Int = 1000): ByteArray {
-        clientSocket.soTimeout = timeoutMs
+    protected fun Socket.awaitServerMessage(timeoutMs: Int = 100): Any? {
+        this.soTimeout = timeoutMs
         val buffer = ByteArray(1024)
         val byteArrayOutputStream = ByteArrayOutputStream()
 
         try {
-            val inputStream = clientSocket.getInputStream()
+            val inputStream = this.getInputStream()
             var bytesRead: Int
             while (inputStream.read(buffer).also { bytesRead = it } != -1) {
                 byteArrayOutputStream.write(buffer, 0, bytesRead)
@@ -50,7 +51,7 @@ open class BaseIntegrationTest(val args: Map<String, List<String>> = mapOf()) {
             // Do nothing, return from method
         }
 
-        return byteArrayOutputStream.toByteArray()
+        return respDecoder.decode(ByteArrayInputStream(byteArrayOutputStream.toByteArray()))
     }
 
 }
