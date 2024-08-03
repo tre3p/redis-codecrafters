@@ -12,6 +12,10 @@ class MainRequestProcessor(
     private val respEncoder: RESPEncoder,
     private val router: HandlerRouter
 ): Logging {
+
+    /**
+     * processRequest() should be executed in a loop since one connection can send multiple commands to server
+     */
     tailrec fun processRequest(requestInputStream: InputStream, requestOutputStream: OutputStream) {
         val decodedStatement = respDecoder.decode(requestInputStream) ?: return
         logger.info("Got instruction: $decodedStatement")
