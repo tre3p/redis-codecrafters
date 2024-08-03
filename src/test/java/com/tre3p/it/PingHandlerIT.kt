@@ -9,6 +9,24 @@ import org.junit.jupiter.api.Test
 class PingHandlerIT : BaseIntegrationTest() {
 
     @Test
+    fun shouldHandleSeveralCommandsFromSameConnection() {
+        val clientConn = getServerConnection()
+        val pingMessage = respEncoder.encode(RESPArray(listOf(BulkString("PING"))))
+
+        clientConn.sendServerMessage(pingMessage)
+        val firstServerResponse = clientConn.awaitServerMessage()
+
+        Assertions.assertNotNull(firstServerResponse)
+        Assertions.assertEquals((firstServerResponse as String), "PONG")
+
+        clientConn.sendServerMessage(pingMessage)
+        val secondServerResponse = clientConn.awaitServerMessage()
+
+        Assertions.assertNotNull(secondServerResponse)
+        Assertions.assertEquals((secondServerResponse as String), "PONG")
+    }
+
+    @Test
     fun shouldRespondPongToPing() {
         val clientConn = getServerConnection()
         val pingMessage = respEncoder.encode(RESPArray(listOf(BulkString("PING"))))
