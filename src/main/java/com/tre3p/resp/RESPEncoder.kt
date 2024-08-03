@@ -3,7 +3,6 @@ package com.tre3p.resp
 import com.tre3p.resp.types.BulkString
 import com.tre3p.resp.types.RESPArray
 import com.tre3p.resp.types.SimpleString
-import java.util.Arrays
 
 class RESPEncoder {
     fun encode(args: Any): ByteArray =
@@ -30,7 +29,6 @@ class RESPEncoder {
                     .plus(encode(it))
         }
 
-        println(Arrays.toString(initialByteArray))
         return initialByteArray
     }
 

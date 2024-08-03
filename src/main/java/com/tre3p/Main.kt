@@ -16,21 +16,21 @@ import com.tre3p.storage.InMemoryKeyValueStorage
 private const val TCP_PORT = 6379
 
 fun main(args: Array<String>) {
-    prepareAndLaunchServer(args)
+    val parsedArguments = parseCliArguments(args)
+    val redisServer = prepareServer(parsedArguments)
+    redisServer.launchServer()
 }
 
-fun prepareAndLaunchServer(args: Array<String>) {
-    val cliArgs = parseCliArguments(args)
-
+fun prepareServer(args: Map<String, List<String>>): ConcurrentTcpServer {
     val mainRequestProcessor =
         MainRequestProcessor(
             RESPDecoder(),
             RESPEncoder(),
-            HandlerRouter(buildHandlerProvider(cliArgs)),
+            HandlerRouter(buildHandlerProvider(args)),
         )
 
     val redisServer = ConcurrentTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
-    redisServer.launchServer()
+    return redisServer
 }
 
 private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig =

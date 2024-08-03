@@ -20,6 +20,11 @@ class ConcurrentTcpServer(
         logger.info("TCP server started")
     }
 
+    fun stopServer() {
+        serverSocket?.close()
+        logger.info("Closing server socket")
+    }
+
     private fun launchRequestListener() {
         serverSocket ?: throw Exception("TCP server isn't launched!")
 

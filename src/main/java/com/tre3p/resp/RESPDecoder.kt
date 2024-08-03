@@ -7,12 +7,15 @@ open class RESPDecoder {
         when (val readByte = inputStream.read().toByte()) {
             EOF_BYTE -> null
             ASTERISK_BYTE -> parseArray(inputStream)
-            DOLLAR_BYTE -> parseString(inputStream)
+            DOLLAR_BYTE -> parseBulkString(inputStream)
+            PLUS_BYTE -> parseSimpleString(inputStream)
             else -> throw Exception("$readByte byte type isn't supported yet")
         }
 
-    private fun parseString(inputStream: InputStream): String {
-        val stringLength = inputStream.readCrLfTerminatedInt()
+    private fun parseSimpleString(inputStream: InputStream): String = inputStream.readCrLfTerminatedElement()
+
+    private fun parseBulkString(inputStream: InputStream): String {
+        val stringLength = inputStream.readCrLfTerminatedElement().toInt()
         if (stringLength < 0) return ""
 
         val readString = String(inputStream.readNBytes(stringLength))
@@ -24,7 +27,7 @@ open class RESPDecoder {
     }
 
     private fun parseArray(inputStream: InputStream): List<Any> {
-        val elementsCount = inputStream.readCrLfTerminatedInt()
+        val elementsCount = inputStream.readCrLfTerminatedElement().toInt()
         if (elementsCount < 0) return emptyList()
 
         val elements = mutableListOf<Any>()

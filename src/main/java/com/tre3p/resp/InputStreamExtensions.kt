@@ -2,7 +2,7 @@ package com.tre3p.resp
 
 import java.io.InputStream
 
-fun InputStream.readCrLfTerminatedInt(): Int {
+fun InputStream.readCrLfTerminatedElement(): String {
     val sb = StringBuilder()
 
     var byteRead: Int
@@ -22,5 +22,5 @@ fun InputStream.readCrLfTerminatedInt(): Int {
         sb.append(byteRead.toChar())
     }
 
-    return sb.toString().toInt()
+    return sb.toString()
 }
