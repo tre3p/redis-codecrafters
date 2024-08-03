@@ -5,11 +5,12 @@ import java.util.concurrent.ConcurrentHashMap
 class InMemoryKeyValueStorage : KeyValueStorage {
     private val storage = ConcurrentHashMap<Any, Any>()
 
-    override fun getValue(key: Any): Any? {
-        return storage[key]
-    }
+    override fun getValue(key: Any): Any? = storage[key]
 
-    override fun putValue(key: Any, value: Any) {
+    override fun putValue(
+        key: Any,
+        value: Any,
+    ) {
         storage[key] = value
     }
 

@@ -6,8 +6,8 @@ import com.tre3p.resp.types.SimpleString
 import com.tre3p.storage.KeyValueStorage
 
 class SetHandler(
-    val kvStorage: KeyValueStorage
-): Handler {
+    val kvStorage: KeyValueStorage,
+) : Handler {
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 3) return SimpleString("Unexpected args count for SET command")
         val key = args[1]!!

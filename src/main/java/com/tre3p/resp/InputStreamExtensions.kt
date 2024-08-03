@@ -1,8 +1,6 @@
 package com.tre3p.resp
 
 import java.io.InputStream
-import java.lang.Exception
-import java.lang.StringBuilder
 
 fun InputStream.readCrLfTerminatedElement(): String {
     val sb = StringBuilder()

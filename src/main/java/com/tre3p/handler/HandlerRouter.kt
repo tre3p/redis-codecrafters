@@ -4,7 +4,7 @@ import com.tre3p.resp.types.SimpleString
 import org.apache.logging.log4j.kotlin.Logging
 
 class HandlerRouter(
-    private val handlerProvider: HandlerProvider
+    private val handlerProvider: HandlerProvider,
 ) : Logging {
     fun route(args: List<*>): Any {
         if (args.isEmpty()) {

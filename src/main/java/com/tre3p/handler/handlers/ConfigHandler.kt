@@ -7,7 +7,7 @@ import com.tre3p.resp.types.RESPDataType
 import com.tre3p.resp.types.SimpleString
 
 class ConfigHandler(
-    val persistenceConfig: PersistenceConfig
+    val persistenceConfig: PersistenceConfig,
 ) : Handler {
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 3) return SimpleString("Unexpected args size for CONFIG command")
@@ -23,17 +23,16 @@ class ConfigHandler(
                 }
             }
 
-            else -> SimpleString("Unknown command ${args[1].toString()} for CONFIG command")
+            else -> SimpleString("Unknown command ${args[1]} for CONFIG command")
         }
 
         return responseArray ?: SimpleString("Config value ${args[2]} doesn't exists")
     }
 
-    private fun handleGetConfig(paramName: String): String? {
-        return when(paramName) {
+    private fun handleGetConfig(paramName: String): String? =
+        when (paramName) {
             "dbfilename" -> persistenceConfig.dbFileName
             "dir" -> persistenceConfig.dirName
             else -> null
         }
-    }
 }
