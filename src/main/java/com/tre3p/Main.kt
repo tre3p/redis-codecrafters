@@ -18,22 +18,22 @@ fun main(args: Array<String>) {
 fun prepareAndLaunchServer(args: Array<String>) {
     val cliArgs = parseCliArguments(args)
 
-    val mainRequestProcessor = MainRequestProcessor(
-        RESPDecoder(),
-        RESPEncoder(),
-        HandlerRouter(buildHandlerProvider(cliArgs))
-    )
+    val mainRequestProcessor =
+        MainRequestProcessor(
+            RESPDecoder(),
+            RESPEncoder(),
+            HandlerRouter(buildHandlerProvider(cliArgs)),
+        )
 
     val redisServer = ConcurrentTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
     redisServer.launchServer()
 }
 
-private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig {
-    return PersistenceConfig(
+private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig =
+    PersistenceConfig(
         dirName = args["--dir"]?.first(),
-        dbFileName = args["--dbfilename"]?.first()
+        dbFileName = args["--dbfilename"]?.first(),
     )
-}
 
 private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvider {
     val echoHandler = EchoHandler()
@@ -46,18 +46,23 @@ private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvid
     val persistenceConfig = buildPersistenceConfig(args)
     val configHandler = ConfigHandler(persistenceConfig)
 
-    return HandlerProvider(mapOf(
-        "echo" to echoHandler,
-        "ping" to pingHandler,
-        "get" to getHandler,
-        "set" to setHandler,
-        "config" to configHandler
-    ))
+    return HandlerProvider(
+        mapOf(
+            "echo" to echoHandler,
+            "ping" to pingHandler,
+            "get" to getHandler,
+            "set" to setHandler,
+            "config" to configHandler,
+        ),
+    )
 }
 
-fun parseCliArguments(args: Array<String>): Map<String, List<String>> {
-    return args.fold(Pair(emptyMap<String, List<String>>(), "")) { (map, lastKey), elem ->
-        if (elem.startsWith("-"))  Pair(map + (elem to emptyList()), elem)
-        else Pair(map + (lastKey to map.getOrDefault(lastKey, emptyList()) + elem), lastKey)
-    }.first
-}
+fun parseCliArguments(args: Array<String>): Map<String, List<String>> =
+    args
+        .fold(Pair(emptyMap<String, List<String>>(), "")) { (map, lastKey), elem ->
+            if (elem.startsWith("-")) {
+                Pair(map + (elem to emptyList()), elem)
+            } else {
+                Pair(map + (lastKey to map.getOrDefault(lastKey, emptyList()) + elem), lastKey)
+            }
+        }.first

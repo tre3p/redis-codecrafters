@@ -4,14 +4,13 @@ import java.io.InputStream
 import java.lang.Exception
 
 open class RESPDecoder {
-    fun decode(inputStream: InputStream): Any? {
-        return when (val readByte = inputStream.read().toByte()) {
+    fun decode(inputStream: InputStream): Any? =
+        when (val readByte = inputStream.read().toByte()) {
             EOF_BYTE -> null
             ASTERISK_BYTE -> parseArray(inputStream)
             DOLLAR_BYTE -> parseString(inputStream)
             else -> throw Exception("$readByte byte type isn't supported yet")
         }
-    }
 
     private fun parseString(inputStream: InputStream): String {
         val stringLength = inputStream.readCrLfTerminatedInt()

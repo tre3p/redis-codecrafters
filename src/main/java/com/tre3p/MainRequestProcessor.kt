@@ -10,13 +10,15 @@ import java.io.OutputStream
 class MainRequestProcessor(
     private val respDecoder: RESPDecoder,
     private val respEncoder: RESPEncoder,
-    private val router: HandlerRouter
-): Logging {
-
+    private val router: HandlerRouter,
+) : Logging {
     /**
      * processRequest() should be executed in a loop since one connection can send multiple commands to server
      */
-    tailrec fun processRequest(requestInputStream: InputStream, requestOutputStream: OutputStream) {
+    tailrec fun processRequest(
+        requestInputStream: InputStream,
+        requestOutputStream: OutputStream,
+    ) {
         val decodedStatement = respDecoder.decode(requestInputStream) ?: return
         logger.info("Got instruction: $decodedStatement")
 

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class RESPDecoderTest {
-
     private val respDecoder: RESPDecoder = RESPDecoder()
 
     // RESP BulkString Tests

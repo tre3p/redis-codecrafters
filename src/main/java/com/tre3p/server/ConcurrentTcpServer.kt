@@ -10,9 +10,8 @@ import kotlin.concurrent.thread
 
 class ConcurrentTcpServer(
     private val port: Int,
-    private val handlerFunc: (InputStream, OutputStream) -> (Unit)
+    private val handlerFunc: (InputStream, OutputStream) -> (Unit),
 ) : Logging {
-
     private val defaultThreadPool = Executors.newVirtualThreadPerTaskExecutor()
     private var serverSocket: ServerSocket? = null
 

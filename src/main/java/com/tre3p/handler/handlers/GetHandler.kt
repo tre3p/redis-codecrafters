@@ -7,16 +7,14 @@ import com.tre3p.resp.types.SimpleString
 import com.tre3p.storage.KeyValueStorage
 
 class GetHandler(
-    val keyValueStorage: KeyValueStorage
-): Handler {
-
+    val keyValueStorage: KeyValueStorage,
+) : Handler {
     private val NULL_BULK_STRING = BulkString(null)
 
     override fun handle(args: List<*>): RESPDataType {
         if (args.size < 2) return SimpleString("Unexpected args size for GET command")
         val key = args[1]!!
         val storageValue = keyValueStorage.getValue(key)
-
 
         if (storageValue == null) {
             return NULL_BULK_STRING
