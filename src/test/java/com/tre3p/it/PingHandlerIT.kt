@@ -5,7 +5,6 @@ import com.tre3p.resp.types.BulkString
 import com.tre3p.resp.types.RESPArray
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayInputStream
 
 class PingHandlerIT : BaseIntegrationTest() {
 
@@ -14,10 +13,28 @@ class PingHandlerIT : BaseIntegrationTest() {
         val clientConn = getServerConnection()
         val pingMessage = respEncoder.encode(RESPArray(listOf(BulkString("PING"))))
 
-        sendServerMessage(clientConn, pingMessage)
-        val serverResponse = awaitServerMessage(clientConn)
-        val decodedServerResponse = respDecoder.decode(ByteArrayInputStream(serverResponse)) as String
+        clientConn.sendServerMessage(pingMessage)
+        val serverResponse = clientConn.awaitServerMessage()
 
-        Assertions.assertEquals(decodedServerResponse, "PONG")
+        Assertions.assertNotNull(serverResponse)
+        Assertions.assertEquals((serverResponse as String), "PONG")
+    }
+
+    @Test
+    fun shouldRespondToMultiplePings() {
+        val firstClientConn = getServerConnection()
+        val secondClientConn = getServerConnection()
+
+        val pingMessage = respEncoder.encode(RESPArray(listOf(BulkString("PING"))))
+
+        firstClientConn.sendServerMessage(pingMessage)
+        secondClientConn.sendServerMessage(pingMessage)
+        val firstServerResponse = firstClientConn.awaitServerMessage()
+        val secondServerResponse = secondClientConn.awaitServerMessage()
+
+        Assertions.assertNotNull(firstServerResponse)
+        Assertions.assertNotNull(secondServerResponse)
+        Assertions.assertEquals((firstServerResponse as String), "PONG")
+        Assertions.assertEquals((secondServerResponse as String), "PONG")
     }
 }
