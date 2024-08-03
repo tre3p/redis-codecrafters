@@ -3,7 +3,6 @@ package com.tre3p.resp
 import com.tre3p.resp.types.BulkString
 import com.tre3p.resp.types.RESPArray
 import com.tre3p.resp.types.SimpleString
-import java.lang.Exception
 import java.util.Arrays
 
 class RESPEncoder {

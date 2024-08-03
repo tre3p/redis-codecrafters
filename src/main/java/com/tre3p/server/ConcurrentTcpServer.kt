@@ -3,7 +3,6 @@ package com.tre3p.server
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Exception
 import java.net.ServerSocket
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread

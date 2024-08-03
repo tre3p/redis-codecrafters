@@ -1,7 +1,6 @@
 package com.tre3p.resp
 
 import java.io.InputStream
-import java.lang.Exception
 
 open class RESPDecoder {
     fun decode(inputStream: InputStream): Any? =
