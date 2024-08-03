@@ -6,7 +6,7 @@ import com.tre3p.resp.types.RESPArray
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class PingHandlerIT : BaseIntegrationTest() {
+class PingHandlerTest : BaseIntegrationTest() {
 
     @Test
     fun shouldHandleSeveralCommandsFromSameConnection() {
