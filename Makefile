@@ -2,4 +2,4 @@ test:
 	mvn clean test
 
 lint:
-    mvn antrun:run@ktlint
+	mvn clean verify -DskipTests
