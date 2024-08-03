@@ -4,7 +4,7 @@ import java.io.InputStream
 import java.lang.Exception
 import java.lang.StringBuilder
 
-fun InputStream.readCrLfTerminatedInt(): Int {
+fun InputStream.readCrLfTerminatedElement(): String {
     val sb = StringBuilder()
 
     var byteRead: Int
@@ -24,5 +24,5 @@ fun InputStream.readCrLfTerminatedInt(): Int {
         sb.append(byteRead.toChar())
     }
 
-    return sb.toString().toInt()
+    return sb.toString()
 }

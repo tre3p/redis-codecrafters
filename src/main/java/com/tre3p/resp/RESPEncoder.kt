@@ -26,7 +26,6 @@ class RESPEncoder {
                 .plus(encode(it))
         }
 
-        println(Arrays.toString(initialByteArray))
         return initialByteArray
     }
 
