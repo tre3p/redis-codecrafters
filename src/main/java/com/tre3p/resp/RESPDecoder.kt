@@ -5,9 +5,7 @@ import java.lang.Exception
 
 open class RESPDecoder {
     fun decode(inputStream: InputStream): Any? {
-        val readByte = inputStream.read().toByte()
-
-        return when (readByte) {
+        return when (val readByte = inputStream.read().toByte()) {
             EOF_BYTE -> null
             ASTERISK_BYTE -> parseArray(inputStream)
             DOLLAR_BYTE -> parseString(inputStream)
@@ -17,6 +15,8 @@ open class RESPDecoder {
 
     private fun parseString(inputStream: InputStream): String {
         val stringLength = inputStream.readCrLfTerminatedInt()
+        if (stringLength < 0) return ""
+
         val readString = String(inputStream.readNBytes(stringLength))
 
         inputStream.read()
@@ -27,6 +27,8 @@ open class RESPDecoder {
 
     private fun parseArray(inputStream: InputStream): List<Any> {
         val elementsCount = inputStream.readCrLfTerminatedInt()
+        if (elementsCount < 0) return emptyList()
+
         val elements = mutableListOf<Any>()
 
         for (i in 0 until elementsCount) {
