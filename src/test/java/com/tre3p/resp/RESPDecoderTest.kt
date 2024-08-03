@@ -3,15 +3,15 @@ package com.tre3p.resp
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class RESPParserTest {
+class RESPDecoderTest {
 
-    private val respParser: RESPDecoder = RESPDecoder()
+    private val respDecoder: RESPDecoder = RESPDecoder()
 
     // RESP BulkString Tests
     @Test
     fun shouldCorrectlyParseBulkString() {
         val t = "\$5\r\nHello\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as String
+        val parseResult = respDecoder.decode(t) as String
 
         assertEquals(parseResult, "Hello")
     }
@@ -19,7 +19,7 @@ class RESPParserTest {
     @Test
     fun shouldCorrectlyParseEmptyBulkString() {
         val t = "\$0\r\n\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as String
+        val parseResult = respDecoder.decode(t) as String
 
         assertEquals(parseResult, "")
     }
@@ -27,7 +27,7 @@ class RESPParserTest {
     @Test
     fun shouldCorrectlyParseBulkStringWithNegativeLength() {
         val t = "\$-15\r\n\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as String
+        val parseResult = respDecoder.decode(t) as String
 
         assertEquals(parseResult, "")
     }
@@ -36,7 +36,7 @@ class RESPParserTest {
     @Test
     fun shouldCorrectlyParseArrayOfBulkStrings() {
         val t = "*2\r\n\$4\r\nECHO\r\n\$3\r\nhey\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as List<*>
+        val parseResult = respDecoder.decode(t) as List<*>
 
         assertEquals(2, parseResult.size)
         assertEquals("ECHO", parseResult[0])
@@ -46,7 +46,7 @@ class RESPParserTest {
     @Test
     fun shouldCorrectlyParseEmptyArray() {
         val t = "*0\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as List<*>
+        val parseResult = respDecoder.decode(t) as List<*>
 
         assertEquals(0, parseResult.size)
     }
@@ -54,7 +54,7 @@ class RESPParserTest {
     @Test
     fun shouldCorrectlyReactToNegativeLength() {
         val t = "*-5\r\n".byteInputStream()
-        val parseResult = respParser.decode(t) as List<*>
+        val parseResult = respDecoder.decode(t) as List<*>
 
         assertEquals(0, parseResult.size)
     }
