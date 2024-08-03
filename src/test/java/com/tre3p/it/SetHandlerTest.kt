@@ -7,11 +7,19 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class SetHandlerTest : BaseIntegrationTest() {
-
     @Test
     fun shouldReturnOKOnValidSyntax() {
         val clientConn = getServerConnection()
-        val setMessage = respEncoder.encode(RESPArray(listOf(SimpleString("SET"), SimpleString("test_key"), SimpleString("test_value"))))
+        val setMessage =
+            respEncoder.encode(
+                RESPArray(
+                    listOf(
+                        SimpleString("SET"),
+                        SimpleString("test_key"),
+                        SimpleString("test_value"),
+                    ),
+                ),
+            )
 
         clientConn.sendServerMessage(setMessage)
         val serverResponse = clientConn.awaitServerMessage() as String
@@ -22,7 +30,18 @@ class SetHandlerTest : BaseIntegrationTest() {
     @Test
     fun shouldReturnOKOnValidSyntaxWithPx() {
         val clientConn = getServerConnection()
-        val setMessage = respEncoder.encode(RESPArray(listOf(SimpleString("SET"), SimpleString("test_key"), SimpleString("test_value"), SimpleString("px"), SimpleString("500"))))
+        val setMessage =
+            respEncoder.encode(
+                RESPArray(
+                    listOf(
+                        SimpleString("SET"),
+                        SimpleString("test_key"),
+                        SimpleString("test_value"),
+                        SimpleString("px"),
+                        SimpleString("500"),
+                    ),
+                ),
+            )
 
         clientConn.sendServerMessage(setMessage)
         val serverResponse = clientConn.awaitServerMessage() as String

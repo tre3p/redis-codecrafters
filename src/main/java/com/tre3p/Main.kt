@@ -22,22 +22,22 @@ fun main(args: Array<String>) {
 }
 
 fun prepareServer(args: Map<String, List<String>>): ConcurrentTcpServer {
-    val mainRequestProcessor = MainRequestProcessor(
-        RESPDecoder(),
-        RESPEncoder(),
-        HandlerRouter(buildHandlerProvider(args))
-    )
+    val mainRequestProcessor =
+        MainRequestProcessor(
+            RESPDecoder(),
+            RESPEncoder(),
+            HandlerRouter(buildHandlerProvider(args)),
+        )
 
     val redisServer = ConcurrentTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
     return redisServer
 }
 
-private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig {
-    return PersistenceConfig(
+private fun buildPersistenceConfig(args: Map<String, List<String>>): PersistenceConfig =
+    PersistenceConfig(
         dirName = args["--dir"]?.first(),
-        dbFileName = args["--dbfilename"]?.first()
+        dbFileName = args["--dbfilename"]?.first(),
     )
-}
 
 private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvider {
     val echoHandler = EchoHandler()

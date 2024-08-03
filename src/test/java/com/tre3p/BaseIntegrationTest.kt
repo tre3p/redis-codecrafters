@@ -10,8 +10,9 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketTimeoutException
 
-open class BaseIntegrationTest(val args: Map<String, List<String>> = mapOf()) {
-
+open class BaseIntegrationTest(
+    val args: Map<String, List<String>> = mapOf(),
+) {
     private val tcpServer = prepareServer(args)
     protected val respEncoder = RESPEncoder()
     protected val respDecoder = RESPDecoder()
@@ -53,5 +54,4 @@ open class BaseIntegrationTest(val args: Map<String, List<String>> = mapOf()) {
 
         return respDecoder.decode(ByteArrayInputStream(byteArrayOutputStream.toByteArray()))
     }
-
 }

@@ -7,11 +7,19 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class GetHandlerTest : BaseIntegrationTest() {
-
     @Test
     fun shouldReturnSetValue() {
         val clientConn = getServerConnection()
-        val setMessage = respEncoder.encode(RESPArray(listOf(SimpleString("SET"), SimpleString("test_key"), SimpleString("test_value"))))
+        val setMessage =
+            respEncoder.encode(
+                RESPArray(
+                    listOf(
+                        SimpleString("SET"),
+                        SimpleString("test_key"),
+                        SimpleString("test_value"),
+                    ),
+                ),
+            )
         val getMessage = respEncoder.encode(RESPArray(listOf(SimpleString("GET"), SimpleString("test_key"))))
 
         clientConn.sendServerMessage(setMessage)
@@ -27,7 +35,18 @@ class GetHandlerTest : BaseIntegrationTest() {
     @Test
     fun shouldCorrectlyHandleExpiredValue() {
         val clientConn = getServerConnection()
-        val setMessage = respEncoder.encode(RESPArray(listOf(SimpleString("SET"), SimpleString("test_key"), SimpleString("test_value"), SimpleString("px"), SimpleString("500"))))
+        val setMessage =
+            respEncoder.encode(
+                RESPArray(
+                    listOf(
+                        SimpleString("SET"),
+                        SimpleString("test_key"),
+                        SimpleString("test_value"),
+                        SimpleString("px"),
+                        SimpleString("500"),
+                    ),
+                ),
+            )
         val getMessage = respEncoder.encode(RESPArray(listOf(SimpleString("GET"), SimpleString("test_key"))))
 
         clientConn.sendServerMessage(setMessage)

@@ -12,9 +12,7 @@ open class RESPDecoder {
             else -> throw Exception("$readByte byte type isn't supported yet")
         }
 
-    private fun parseSimpleString(inputStream: InputStream): String {
-        return inputStream.readCrLfTerminatedElement()
-    }
+    private fun parseSimpleString(inputStream: InputStream): String = inputStream.readCrLfTerminatedElement()
 
     private fun parseBulkString(inputStream: InputStream): String {
         val stringLength = inputStream.readCrLfTerminatedElement().toInt()

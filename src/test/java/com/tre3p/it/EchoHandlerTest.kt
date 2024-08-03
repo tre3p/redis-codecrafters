@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class EchoHandlerTest : BaseIntegrationTest() {
-
     @Test
     fun shouldCorrectlyHandleEchoCommand() {
         val clientConn = getServerConnection()

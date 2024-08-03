@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class PingHandlerTest : BaseIntegrationTest() {
-
     @Test
     fun shouldHandleSeveralCommandsFromSameConnection() {
         val clientConn = getServerConnection()
