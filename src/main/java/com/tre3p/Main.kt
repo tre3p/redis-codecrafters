@@ -10,7 +10,7 @@ import com.tre3p.handler.handlers.PingHandler
 import com.tre3p.handler.handlers.SetHandler
 import com.tre3p.resp.RESPDecoder
 import com.tre3p.resp.RESPEncoder
-import com.tre3p.server.ConcurrentTcpServer
+import com.tre3p.server.MultiplexedTcpServer
 import com.tre3p.storage.InMemoryKeyValueStorage
 
 private const val TCP_PORT = 6379
@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     redisServer.launchServer()
 }
 
-fun prepareServer(args: Map<String, List<String>>): ConcurrentTcpServer {
+fun prepareServer(args: Map<String, List<String>>): MultiplexedTcpServer {
     val mainRequestProcessor =
         MainRequestProcessor(
             RESPDecoder(),
@@ -29,7 +29,7 @@ fun prepareServer(args: Map<String, List<String>>): ConcurrentTcpServer {
             HandlerRouter(buildHandlerProvider(args)),
         )
 
-    val redisServer = ConcurrentTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
+    val redisServer = MultiplexedTcpServer(TCP_PORT, mainRequestProcessor::processRequest)
     return redisServer
 }
 

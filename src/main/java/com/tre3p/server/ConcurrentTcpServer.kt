@@ -7,6 +7,9 @@ import java.net.ServerSocket
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
+/**
+ * Currently unused. DO NOT use without proper storage synchronization
+ */
 class ConcurrentTcpServer(
     private val port: Int,
     private val handlerFunc: (InputStream, OutputStream) -> (Unit),
