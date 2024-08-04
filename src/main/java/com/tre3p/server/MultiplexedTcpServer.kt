@@ -4,7 +4,6 @@ import org.apache.logging.log4j.kotlin.Logging
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.net.InetSocketAddress
-import java.net.StandardSocketOptions
 import java.nio.ByteBuffer
 import java.nio.channels.SelectionKey
 import java.nio.channels.Selector
@@ -18,9 +17,12 @@ class MultiplexedTcpServer(
 ) : Logging {
     private lateinit var serverSocket: ServerSocketChannel
     private lateinit var selector: Selector
+    private lateinit var selectorLoopThread: Thread
+    private var selectorTimeoutMs: Long = 100
 
     fun stopServer() {
         logger.info("Stopping server..")
+        selectorLoopThread.interrupt()
         serverSocket.close()
         selector.close()
     }
@@ -32,11 +34,10 @@ class MultiplexedTcpServer(
                 it.bind(InetSocketAddress(port))
                 it.configureBlocking(false)
                 it.register(selector, SelectionKey.OP_ACCEPT)
-                it.setOption(StandardSocketOptions.SO_REUSEADDR, true)
             }
 
         logger.info("Starting server")
-        thread { selectorLoop(selector, serverSocket) }
+        selectorLoopThread = thread { selectorLoop(selector, serverSocket) }
         logger.info("Server started!")
     }
 
@@ -44,22 +45,24 @@ class MultiplexedTcpServer(
         selector: Selector,
         serverSock: ServerSocketChannel,
     ) {
-        selector.select(200)
+        if (!Thread.currentThread().isInterrupted) {
+            selector.select(selectorTimeoutMs)
 
-        val selectedKeysIter = selector.selectedKeys().iterator()
-        while (selectedKeysIter.hasNext()) {
-            val key = selectedKeysIter.next()
+            val selectedKeysIter = selector.selectedKeys().iterator()
+            while (selectedKeysIter.hasNext()) {
+                val key = selectedKeysIter.next()
 
-            if (key.isAcceptable) {
-                handleAcceptable(selector, serverSock)
-            } else if (key.isReadable) {
-                handleReadable((key.channel() as SocketChannel))
+                if (key.isAcceptable) {
+                    handleAcceptable(selector, serverSock)
+                } else if (key.isReadable) {
+                    handleReadable((key.channel() as SocketChannel))
+                }
+
+                selectedKeysIter.remove()
             }
 
-            selectedKeysIter.remove()
+            selectorLoop(selector, serverSock)
         }
-
-        selectorLoop(selector, serverSock)
     }
 
     private fun handleReadable(clientSocketChannel: SocketChannel) {
