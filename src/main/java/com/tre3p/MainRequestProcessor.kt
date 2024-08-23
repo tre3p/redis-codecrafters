@@ -11,11 +11,10 @@ class MainRequestProcessor(
     private val respEncoder: RESPEncoder,
     private val router: HandlerRouter,
 ) : Logging {
-    fun processRequest(requestInputStream: InputStream): ByteArray {
-        val decodedStatement = respDecoder.decode(requestInputStream) ?: return ByteArray(0)
-        logger.info("Got instruction: $decodedStatement")
-
-        val response = router.route(decodedStatement as List<*>)
-        return respEncoder.encode(response)
-    }
+    fun processRequest(requestInputStream: InputStream) =
+        respDecoder.decode(requestInputStream)
+            ?.also { logger.info("Got instruction: $it") }
+            ?.let { router.route(it as List<*>) }
+            ?.let { respEncoder.encode(it) }
+            ?: ByteArray(0)
 }
