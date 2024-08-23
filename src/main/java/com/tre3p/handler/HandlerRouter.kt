@@ -13,7 +13,7 @@ class HandlerRouter(
         }
 
         val commandType = args[0].toString().lowercase()
-        val commandHandler = handlerProvider.getHandler(commandType)
+        val commandHandler = handlerProvider[commandType]
         if (commandHandler == null) {
             logger.debug("No handler found for command $commandType")
             return SimpleString("No handler found for command $commandType")

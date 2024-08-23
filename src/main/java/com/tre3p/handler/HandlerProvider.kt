@@ -5,5 +5,5 @@ import com.tre3p.handler.handlers.Handler
 class HandlerProvider(
     val commandToHandler: Map<String, Handler>,
 ) {
-    fun getHandler(command: String): Handler? = commandToHandler[command]
+    operator fun get(command: String): Handler? = commandToHandler[command]
 }
