@@ -4,5 +4,6 @@ import com.tre3p.resp.types.RESPDataType
 
 interface Handler {
     val commandName: String
+
     fun handle(args: List<*>): RESPDataType<*>
 }

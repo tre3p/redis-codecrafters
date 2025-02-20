@@ -66,7 +66,8 @@ class MultiplexedTcpServer(
     }
 
     private fun handleReadable(clientSocketChannel: SocketChannel) {
-        val buf = ByteBuffer.allocate(4096) // TODO: check if this could be a problem (i.e client can send more than 4096 bytes?)
+        val buf =
+            ByteBuffer.allocate(4096) // TODO: check if this could be a problem (i.e client can send more than 4096 bytes?)
         val readBytes = clientSocketChannel.read(buf)
 
         if (readBytes == -1) {

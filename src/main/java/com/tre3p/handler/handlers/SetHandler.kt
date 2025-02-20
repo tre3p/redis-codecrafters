@@ -1,7 +1,6 @@
 package com.tre3p.handler.handlers
 
 import com.tre3p.model.ExpiryValueWrapper
-import com.tre3p.resp.types.RESPDataType
 import com.tre3p.resp.types.SimpleString
 import com.tre3p.storage.KeyValueStorage
 

@@ -51,13 +51,15 @@ private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvid
     val persistenceConfig = buildPersistenceConfig(args)
     val configHandler = ConfigHandler(persistenceConfig)
 
-    return HandlerProvider(listOf(
-        echoHandler,
-        pingHandler,
-        getHandler,
-        setHandler,
-        configHandler
-    ))
+    return HandlerProvider(
+        listOf(
+            echoHandler,
+            pingHandler,
+            getHandler,
+            setHandler,
+            configHandler,
+        ),
+    )
 }
 
 fun parseCliArguments(args: Array<String>): Map<String, List<String>> =
