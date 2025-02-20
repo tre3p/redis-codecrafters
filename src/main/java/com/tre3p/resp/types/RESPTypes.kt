@@ -1,17 +1,19 @@
 package com.tre3p.resp.types
 
-open class RESPDataType
+interface RESPDataType<T> {
+    val data: T
+}
 
 data class SimpleString(
-    val data: String,
-) : RESPDataType()
+    override val data: String,
+) : RESPDataType<String>
 
 data class BulkString(
-    val data: String?,
-) : RESPDataType() {
+    override val data: String?,
+) : RESPDataType<String?> {
     val length: Int = data?.length ?: -1
 }
 
 data class RESPArray(
-    val elements: List<RESPDataType>,
-) : RESPDataType()
+    override val data: List<RESPDataType<*>>,
+) : RESPDataType<List<RESPDataType<*>>>

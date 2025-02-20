@@ -9,7 +9,9 @@ import com.tre3p.resp.types.SimpleString
 class ConfigHandler(
     val persistenceConfig: PersistenceConfig,
 ) : Handler {
-    override fun handle(args: List<*>): RESPDataType {
+    override val commandName: String = "config"
+
+    override fun handle(args: List<*>): RESPDataType<*> {
         if (args.size < 3) return SimpleString("Unexpected args size for CONFIG command")
 
         val commandType = args[1].toString().lowercase()

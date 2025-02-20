@@ -8,6 +8,7 @@ import com.tre3p.handler.handlers.EchoHandler
 import com.tre3p.handler.handlers.GetHandler
 import com.tre3p.handler.handlers.PingHandler
 import com.tre3p.handler.handlers.SetHandler
+import com.tre3p.request.RequestProcessor
 import com.tre3p.resp.RESPDecoder
 import com.tre3p.resp.RESPEncoder
 import com.tre3p.server.MultiplexedTcpServer
@@ -23,7 +24,7 @@ fun main(args: Array<String>) {
 
 fun prepareServer(args: Map<String, List<String>>): MultiplexedTcpServer {
     val mainRequestProcessor =
-        MainRequestProcessor(
+        RequestProcessor(
             RESPDecoder(),
             RESPEncoder(),
             HandlerRouter(buildHandlerProvider(args)),
@@ -50,15 +51,13 @@ private fun buildHandlerProvider(args: Map<String, List<String>>): HandlerProvid
     val persistenceConfig = buildPersistenceConfig(args)
     val configHandler = ConfigHandler(persistenceConfig)
 
-    return HandlerProvider(
-        mapOf(
-            "echo" to echoHandler,
-            "ping" to pingHandler,
-            "get" to getHandler,
-            "set" to setHandler,
-            "config" to configHandler,
-        ),
-    )
+    return HandlerProvider(listOf(
+        echoHandler,
+        pingHandler,
+        getHandler,
+        setHandler,
+        configHandler
+    ))
 }
 
 fun parseCliArguments(args: Array<String>): Map<String, List<String>> =

@@ -1,4 +1,4 @@
-package com.tre3p.it
+package com.tre3p.integration
 
 import com.tre3p.BaseIntegrationTest
 import com.tre3p.resp.types.RESPArray

@@ -1,5 +1,6 @@
 package com.tre3p.resp
 
+import com.tre3p.resp.ops.readCrLfTerminatedElement
 import java.io.InputStream
 
 open class RESPDecoder {

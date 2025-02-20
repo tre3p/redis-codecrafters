@@ -9,12 +9,14 @@ import com.tre3p.storage.KeyValueStorage
 class GetHandler(
     val keyValueStorage: KeyValueStorage,
 ) : Handler {
+    override val commandName: String = "get"
+
     private val nullBulkString = BulkString(null)
 
-    override fun handle(args: List<*>): RESPDataType {
+    override fun handle(args: List<*>): RESPDataType<*> {
         if (args.size < 2) return SimpleString("Unexpected args size for GET command")
         val key = args[1]!!
-        val storageValue = keyValueStorage.getValue(key)
+        val storageValue = keyValueStorage[key]
 
         if (storageValue == null) {
             return nullBulkString
@@ -23,8 +25,8 @@ class GetHandler(
         if (storageValue is ExpiryValueWrapper<*>) {
             val currentTime = System.currentTimeMillis()
 
-            return if (storageValue.expiryTime.toInt() != -1 && storageValue.expiryTime < currentTime) {
-                keyValueStorage.removeKey(key)
+            return if (storageValue.expirationTimestamp.toInt() != -1 && storageValue.expirationTimestamp < currentTime) {
+                keyValueStorage.remove(key)
                 nullBulkString
             } else {
                 BulkString(storageValue.value.toString())

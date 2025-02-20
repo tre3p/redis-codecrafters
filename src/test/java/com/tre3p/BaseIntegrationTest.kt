@@ -11,7 +11,7 @@ import java.net.Socket
 import java.net.SocketTimeoutException
 
 open class BaseIntegrationTest(
-    val args: Map<String, List<String>> = mapOf(),
+    args: Map<String, List<String>> = mapOf(),
 ) {
     private val tcpServer = prepareServer(args)
     protected val respEncoder = RESPEncoder()
@@ -48,7 +48,7 @@ open class BaseIntegrationTest(
             while (inputStream.read(buffer).also { bytesRead = it } != -1) {
                 byteArrayOutputStream.write(buffer, 0, bytesRead)
             }
-        } catch (e: SocketTimeoutException) {
+        } catch (_: SocketTimeoutException) {
             // Do nothing, return from method
         }
 

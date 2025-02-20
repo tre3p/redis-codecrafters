@@ -1,12 +1,7 @@
 package com.tre3p.storage
 
 interface KeyValueStorage {
-    fun getValue(key: Any): Any?
-
-    fun putValue(
-        key: Any,
-        value: Any,
-    )
-
-    fun removeKey(key: Any)
+    operator fun get(key: Any): Any?
+    operator fun set(key: Any, value: Any)
+    fun remove(key: Any)
 }

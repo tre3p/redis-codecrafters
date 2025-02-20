@@ -17,13 +17,13 @@ class RESPEncoder {
         var initialByteArray =
             byteArrayOf(ASTERISK_BYTE)
                 .plus(
-                    respArray.elements.size
+                    respArray.data.size
                         .toString()
                         .encodeToByteArray(),
                 ).plus(CR)
                 .plus(LF)
 
-        respArray.elements.forEach {
+        respArray.data.forEach {
             initialByteArray =
                 initialByteArray
                     .plus(encode(it))

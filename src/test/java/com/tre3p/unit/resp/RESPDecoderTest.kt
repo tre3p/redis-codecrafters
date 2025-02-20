@@ -1,5 +1,6 @@
-package com.tre3p.resp
+package com.tre3p.unit.resp
 
+import com.tre3p.resp.RESPDecoder
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

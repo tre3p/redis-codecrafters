@@ -8,7 +8,9 @@ import com.tre3p.storage.KeyValueStorage
 class SetHandler(
     val kvStorage: KeyValueStorage,
 ) : Handler {
-    override fun handle(args: List<*>): RESPDataType {
+    override val commandName: String = "set"
+
+    override fun handle(args: List<*>): SimpleString {
         if (args.size < 3) return SimpleString("Unexpected args count for SET command")
         val key = args[1]!!
         val value = args[2]!!
@@ -20,11 +22,11 @@ class SetHandler(
             if (arg.lowercase() == "px") {
                 val currentTime = System.currentTimeMillis()
                 val expiresIn = args[4]!!.toString().toLong()
-                expiryValueWrapper.expiryTime = currentTime + expiresIn
+                expiryValueWrapper.expirationTimestamp = currentTime + expiresIn
             }
         }
 
-        kvStorage.putValue(key, expiryValueWrapper)
+        kvStorage[key] = expiryValueWrapper
         return SimpleString("OK")
     }
 }
